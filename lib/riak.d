@@ -3,6 +3,7 @@ struct riak_op_t {
   int tag;
   string op;
   string stage;
+  string bk;
 };
 typedef struct riak_op_t riak_op_t;
 
@@ -14,7 +15,7 @@ translator riak_op_t < uint64_t tag > {
      : tag>=535 && tag<=537 ? "delete"
      : "?";
   stage =
-     : tag==532 ? "decode_postcommit"
+       tag==532 ? "decode_postcommit"
      : tag==525 ? "waiting_local_vnode"
      : tag==546 ? "process_results"
      : tag==503 ? "execute"
@@ -49,7 +50,9 @@ translator riak_op_t < uint64_t tag > {
      : tag==520 ? "init"
      : tag==510 ? "rr"
      : tag==512 ? "waiting_rr_timeout"
-     : "?"
+     : "?";
+
+  bk = arg1 ? copyinstr(arg1) : "";
 };
 
 inline riak_op_t riak_op = xlate<struct riak_op_t>(arg2);
