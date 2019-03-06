@@ -1,0 +1,29 @@
+#+begin_src sh
+$ dtrace -q -Lriak.d/lib -n 'erlang*:::user_trace-i4s4 { printf("%s %10s %s\n", cwd, riak_op.op, riak_op.stage) }'
+devstage1        get init
+devstage1        put init
+devstage1        put prepare
+devstage1        put validate
+devstage1        put precommit
+devstage1        put execute_local
+devstage1        put waiting_local_vnode
+devstage1        put waiting_local_vnode
+devstage1        put execute_remote
+devstage1        put waiting_remote_vnode
+devstage1        put waiting_remote_vnode
+devstage1        put waiting_remote_vnode
+devstage1        put process_reply
+devstage1        put postcommit
+devstage1        put finish
+#+end_src
+
+#+begin_src sh
+$ dtrace -q -Lriak.d/lib -n 'erlang*:::user_trace-i4s4 { print(riak_op) }' 
+riak_op_t {
+    int tag = 0x1f4
+    string op = [ "get" ]
+    string stage = [ "init" ]
+    string bk = [ "A,0" ]
+}
+#+end_src
+
